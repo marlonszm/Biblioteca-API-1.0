@@ -9,9 +9,6 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      format_sql: true
       ddl-auto: update
-      SQL: DEBUG
-      type:
-        descriptor:
-          sql: TRACE
+    properties:
+      hibernate.format_sql: true

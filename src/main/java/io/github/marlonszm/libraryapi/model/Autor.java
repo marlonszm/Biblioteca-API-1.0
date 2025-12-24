@@ -16,7 +16,7 @@ import java.util.UUID;
 // criação de getters e setters em tempo de compilação
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "livros")
 @Table(name = "autor", schema = "public")
 public class Autor {
 
@@ -35,8 +35,10 @@ public class Autor {
     @Column(name = "nacionalidade", nullable = false, length = 50)
     private String nacionalidade;
     // Um autor pode ter um ou vários livros
-
-    //@OneToMany(mappedBy = "autor")
-    @Transient
+    @OneToMany(
+            mappedBy = "autor",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
     private List<Livro> livros;
 }

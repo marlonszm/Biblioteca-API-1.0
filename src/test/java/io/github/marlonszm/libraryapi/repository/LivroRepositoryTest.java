@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,7 +100,6 @@ class LivroRepositoryTest {
     }
 
     @Test
-
     public void buscarLivroTest(){
         UUID id = UUID.fromString("d54de137-5dd0-47b4-9a09-a1c7727ad34e");
         Livro livro = livroRepository.findById(id).orElse(null);
@@ -109,5 +109,24 @@ class LivroRepositoryTest {
         System.out.println(livro.getAutor().getName());
     }
 
+    @Test
+    public void pesquisaPorTituloTest(){
+        List<Livro> lista = livroRepository.findByTitulo("Biblia KJV");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    public void pesquisaPorIsbnTest(){
+        List<Livro> lista = livroRepository.findByIsbn("91888-84874");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    public void pesquisaPorTituloAndPrecoTest(){
+        var preco = BigDecimal.valueOf(70.00);
+        String titulo = "Biblia KJV";
+        List<Livro> lista = livroRepository.findByTituloAndPreco(titulo, preco);
+        lista.forEach(System.out::println);
+    }
 
 }

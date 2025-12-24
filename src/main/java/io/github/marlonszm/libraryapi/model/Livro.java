@@ -2,6 +2,7 @@ package io.github.marlonszm.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Table(name= "livro")
 // @Getter e @Setter; @ToString; @EqualsAndHashcode; @RequiredArgsConstructor @AllArgsConstructor
 @Data
+@ToString(exclude = "autor")
 public class Livro {
 
     @Id
@@ -36,7 +38,10 @@ public class Livro {
 
     @JoinColumn(name= "id_autor")
     // Um autor pode ter um ou mais livros
-    @ManyToOne//(cascade = CascadeType.ALL)
+    @ManyToOne(
+            //(cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY
+    )
     private Autor autor;
 
 }
