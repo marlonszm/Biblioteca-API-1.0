@@ -26,13 +26,13 @@ class LivroRepositoryTest {
     @Test
     public void salvarTest(){
         Livro livro = new Livro();
-        livro.setIsbn("90887-84874");
+        livro.setIsbn("90887-84875");
         livro.setPreco(BigDecimal.valueOf(100));
-        livro.setGenero(GeneroLivro.FICCAO);
-        livro.setTitulo("UFO");
+        livro.setGenero(GeneroLivro.CIENCIA);
+        livro.setTitulo("Bolsonaro");
         livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
         Autor autor = autorRepository.findById(UUID.fromString("1647fe83-3463-4378-a68e-96416063dc43")).orElse(null);
-        livro.setAutor(autor);
+        //livro.setAutor(autor);
 
         livroRepository.save(livro);
     }
@@ -130,27 +130,49 @@ class LivroRepositoryTest {
     }
 
     @Test
-    public void listarLivrosComqQueryJPQL(){
+    public void listarLivrosComqQueryJPQLTest(){
         var resultado = livroRepository.listarLivrosOrdenadoPorTituloAndPreco();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    public void listarAutoresDosLivros(){
+    public void listarAutoresDosLivrosTest(){
         var resultado = livroRepository.listarAutoresDosLivros();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    public void listarNomesDiferenteslivros(){
+    public void listarNomesDiferenteslivrosTest(){
         var resultado = livroRepository.listarNomesDiferenteslivros();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    public void listarGenerosDeLivrosAutoresBrasileiros(){
+    public void listarGenerosDeLivrosAutoresBrasileirosTest(){
         var resultado = livroRepository.listarGenerosAutoresBrasileiros();
         resultado.forEach(System.out::println);
+    }
+
+    @Test
+    public void listarPorGeneroQueryParamTest(){
+        var resultado = livroRepository.findByGenero(GeneroLivro.BIOGRAFIA, "preco");
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    public void listarPorGeneroQueryPositionalTest(){
+        var resultado = livroRepository.findByGenero(GeneroLivro.BIOGRAFIA, "preco");
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    public void deletePorGeneroTest(){
+        livroRepository.deleteByGenero(GeneroLivro.CIENCIA);
+    }
+
+    @Test
+    public void updateDataPublicacaoTest(){
+        livroRepository.updateDataPublicacao(LocalDate.of(2000, 1 , 1));
     }
 
 }

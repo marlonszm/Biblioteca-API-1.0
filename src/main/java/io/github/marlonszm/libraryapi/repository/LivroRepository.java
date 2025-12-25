@@ -1,9 +1,13 @@
 package io.github.marlonszm.libraryapi.repository;
 
 import io.github.marlonszm.libraryapi.model.Autor;
+import io.github.marlonszm.libraryapi.model.GeneroLivro;
 import io.github.marlonszm.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -55,4 +59,26 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
         order by l.genero
     """)
     List<String> listarGenerosAutoresBrasileiros();
+
+    // named parameters -> parametros nomeados (queries mais complexas)
+    @Query("select l from Livro l where l.genero = :genero order by :paramOrdenacao")
+    List<Livro> findByGenero(@Param("genero") GeneroLivro generoLivro,
+                             @Param("paramOrdenacao")  String nomeDaPropriedade);
+
+    // positional parameters -> parametros posicionais (queries mais simples)
+    @Query("select l from Livro l where l.genero = ?1 order by ?2")
+    List<Livro> findByGeneroPositional(GeneroLivro generoLivro, String nomeDaPropriedade);
+
+    //Operações de escrita necessitam das anotações @Modifying e @Transactional
+    @Modifying
+    @Transactional
+    @Query("delete from Livro where genero = ?1")
+    void deleteByGenero(GeneroLivro genero);
+
+    @Modifying
+    @Transactional
+    @Query("update Livro set dataPublicacao = ?1")
+    void updateDataPublicacao(LocalDate novaData);
+
+
 }
