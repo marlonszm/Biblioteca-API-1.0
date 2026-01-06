@@ -6,8 +6,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +22,7 @@ import java.util.UUID;
 @Setter
 @ToString(exclude = "livros")
 @Table(name = "autor", schema = "public")
+@EntityListeners(AuditingEntityListener.class) //observação de operações na entidade
 public class Autor {
 
     // Uso do 'Column' para fins didáticos e realização de mapeamento.
@@ -41,4 +46,15 @@ public class Autor {
             fetch = FetchType.LAZY
     )
     private List<Livro> livros;
+
+    @CreatedDate
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
 }

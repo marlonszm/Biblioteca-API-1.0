@@ -1,0 +1,48 @@
+package io.github.marlonszm.libraryapi.controller;
+
+import io.github.marlonszm.libraryapi.controller.dto.AutorDTO;
+import io.github.marlonszm.libraryapi.model.Autor;
+import io.github.marlonszm.libraryapi.repository.AutorRepository;
+import io.github.marlonszm.libraryapi.service.AutorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
+@RestController
+@RequestMapping("/autores")
+// https://localhost:8080/autores
+public class AutorController {
+
+    @Autowired
+    private AutorService autorService;
+    @Autowired
+    private AutorRepository autorRepository;
+
+    public AutorController(AutorService autorService) {
+        this.autorService = autorService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> salvar(@RequestBody AutorDTO autor) {
+        Autor autorEntidade = autor.mapearParaAutor();
+        autorRepository.save(autorEntidade);
+        // Serve para captar os dados da requisição atual para construir uma nova URL
+        // Domínio e Path da API
+        // Nesse caso, inserir o id do usuário no path da URL https://localhost:8080/autores/{id}
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(autorEntidade.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
+     }
+
+
+}

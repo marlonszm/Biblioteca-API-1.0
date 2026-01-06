@@ -9,6 +9,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      # atualização da tabela via código
+      # ddl-auto: update
+      # atualização manual da tabela via sql
+      ddl-auto: none
     properties:
       hibernate.format_sql: true

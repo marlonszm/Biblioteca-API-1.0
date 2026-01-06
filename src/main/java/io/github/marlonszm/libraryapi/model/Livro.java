@@ -3,6 +3,7 @@ package io.github.marlonszm.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,5 +44,7 @@ public class Livro {
             fetch = FetchType.LAZY
     )
     private Autor autor;
+
+
 
 }
