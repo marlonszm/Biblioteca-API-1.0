@@ -3,8 +3,13 @@ package io.github.marlonszm.libraryapi.controller.dto;
 import io.github.marlonszm.libraryapi.model.Autor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
-public record AutorDTO(String nome, LocalDate data_nascimento, String nacionalidade) {
+public record AutorDTO(UUID id,
+                       String nome,
+                       LocalDate data_nascimento,
+                       String nacionalidade)
+{
 
     public Autor mapearParaAutor(){
         Autor autor = new Autor();
