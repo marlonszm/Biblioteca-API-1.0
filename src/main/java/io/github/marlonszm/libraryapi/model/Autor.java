@@ -35,7 +35,7 @@ public class Autor {
     private String name;
 
     @Column(name= "data_nascimento", nullable = false)
-    private LocalDate data_nascimento;
+    private LocalDate dataNascimento;
 
     @Column(name = "nacionalidade", nullable = false, length = 50)
     private String nacionalidade;

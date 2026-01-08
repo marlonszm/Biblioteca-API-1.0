@@ -2,6 +2,7 @@ package io.github.marlonszm.libraryapi.service;
 
 import io.github.marlonszm.libraryapi.model.Autor;
 import io.github.marlonszm.libraryapi.repository.AutorRepository;
+import io.github.marlonszm.libraryapi.validator.AutorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +14,18 @@ import java.util.UUID;
 public class AutorService {
 
     @Autowired
-    public AutorRepository autorRepository;
+    private final AutorRepository autorRepository;
 
-    public AutorService(AutorRepository autorRepository) {
+    @Autowired
+    private final AutorValidator autorValidator;
+
+    public AutorService(AutorRepository autorRepository, AutorValidator autorValidator) {
         this.autorRepository = autorRepository;
+        this.autorValidator = autorValidator;
     }
 
     public Autor salvar(Autor autor) {
+        autorValidator.validar(autor);
         return autorRepository.save(autor);
     }
 
@@ -48,6 +54,7 @@ public class AutorService {
         if(autor.getId() == null){
             throw new IllegalArgumentException("Para atualizar, é necessário que o autor já esteja salvo na base");
         }
+        autorValidator.validar(autor);
         autorRepository.save(autor);
     }
 

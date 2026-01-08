@@ -7,14 +7,14 @@ import java.util.UUID;
 
 public record AutorDTO(UUID id,
                        String nome,
-                       LocalDate data_nascimento,
+                       LocalDate dataNascimento,
                        String nacionalidade)
 {
 
     public Autor mapearParaAutor(){
         Autor autor = new Autor();
         autor.setName(this.nome);
-        autor.setData_nascimento(this.data_nascimento);
+        autor.setDataNascimento(this.dataNascimento);
         autor.setNacionalidade(this.nacionalidade);
         return autor;
     }

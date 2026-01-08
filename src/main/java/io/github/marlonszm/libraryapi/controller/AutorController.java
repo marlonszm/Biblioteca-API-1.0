@@ -1,9 +1,12 @@
 package io.github.marlonszm.libraryapi.controller;
 
 import io.github.marlonszm.libraryapi.controller.dto.AutorDTO;
+import io.github.marlonszm.libraryapi.controller.dto.ErroResposta;
+import io.github.marlonszm.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.marlonszm.libraryapi.model.Autor;
 import io.github.marlonszm.libraryapi.repository.AutorRepository;
 import io.github.marlonszm.libraryapi.service.AutorService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.Query;
@@ -35,18 +38,24 @@ public class AutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody AutorDTO autor) {
-        Autor autorEntidade = autor.mapearParaAutor();
-        autorRepository.save(autorEntidade);
-        // Serve para captar os dados da requisição atual para construir uma nova URL
-        // Domínio e Path da API
-        // Nesse caso, inserir o id do usuário no path da URL https://localhost:8080/autores/{id}
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(autorEntidade.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+    public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor) {
+        try{
+            Autor autorEntidade = autor.mapearParaAutor();
+            autorService.salvar(autorEntidade);
+            // Serve para captar os dados da requisição atual para construir uma nova URL
+            // Domínio e Path da API
+            // Nesse caso, inserir o id do usuário no path da URL https://localhost:8080/autores/{id}
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(autorEntidade.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).build();
+        }catch(RegistroDuplicadoException e){
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
      }
 
     @GetMapping("{id}")
@@ -55,7 +64,7 @@ public class AutorController {
         Optional<Autor> autorOptional = autorService.visualizarPorId(idAutor);
         if(autorOptional.isPresent()) {
             Autor autor = autorOptional.get();
-            AutorDTO dto = new AutorDTO(autor.getId(), autor.getName(), autor.getData_nascimento(), autor.getNacionalidade());
+            AutorDTO dto = new AutorDTO(autor.getId(), autor.getName(), autor.getDataNascimento(), autor.getNacionalidade());
             return ResponseEntity.ok(dto);
         }
 
@@ -80,7 +89,7 @@ public class AutorController {
         List<AutorDTO> lista = resultado
                 .stream().map(autor -> new AutorDTO(autor.getId(),
                         autor.getName(),
-                        autor.getData_nascimento(),
+                        autor.getDataNascimento(),
                         autor.getNacionalidade())
                 ).collect(Collectors.toList());
 
@@ -98,7 +107,7 @@ public class AutorController {
         Autor autorEntidade = autorOptional.get();
         autorEntidade.setName(dto.nome());
         autorEntidade.setNacionalidade(dto.nacionalidade());
-        autorEntidade.setData_nascimento(dto.data_nascimento());
+        autorEntidade.setDataNascimento(dto.dataNascimento());
         autorService.atualizar(autorEntidade);
         return ResponseEntity.noContent().build();
     }
