@@ -18,6 +18,7 @@ import java.util.UUID;
 @Service
 public class AutorService {
 
+    //Nomenclatrua sempre private final para adicionar no construtor final
     @Autowired
     private final AutorRepository autorRepository;
 
