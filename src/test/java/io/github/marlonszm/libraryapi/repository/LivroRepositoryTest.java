@@ -31,8 +31,10 @@ class LivroRepositoryTest {
         livro.setGenero(GeneroLivro.CIENCIA);
         livro.setTitulo("Bolsonaro");
         livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
-        Autor autor = autorRepository.findById(UUID.fromString("1647fe83-3463-4378-a68e-96416063dc43")).orElse(null);
-        //livro.setAutor(autor);
+        Autor autor = autorRepository
+                .findById(UUID.fromString("f55a93ee-9290-459a-b20e-ec6acb347da1"))
+                .orElse(null);
+        livro.setAutor(autor);
 
         livroRepository.save(livro);
     }
@@ -50,7 +52,7 @@ class LivroRepositoryTest {
         Autor autor = new Autor();
         autor.setName("Thomas Nelson");
         autor.setNacionalidade("Inglês");
-        autor.setData_nascimento(LocalDate.of(2000, 5, 10));
+        autor.setDataNascimento(LocalDate.of(2000, 5, 10));
 
         autorRepository.save(autor);
 
@@ -72,7 +74,7 @@ class LivroRepositoryTest {
         Autor autor = new Autor();
         autor.setName("Bolsonaro");
         autor.setNacionalidade("brasileiro");
-        autor.setData_nascimento(LocalDate.of(1958, 4, 9));
+        autor.setDataNascimento(LocalDate.of(1958, 4, 9));
         livro.setAutor(autor);
 
         //Não é necessario salvar o autor utilizando o autorRepository nesse caso!
@@ -95,7 +97,7 @@ class LivroRepositoryTest {
 
     @Test
     public void deletarTest(){
-        UUID id = UUID.fromString("2ab985b3-08e2-42cf-a3ea-44ac594ae159");
+        UUID id = UUID.fromString("5f0fef02-c875-4fdf-845e-141d772c322d");
         livroRepository.deleteById(id);
     }
 

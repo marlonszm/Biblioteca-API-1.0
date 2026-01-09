@@ -1,8 +1,11 @@
 package io.github.marlonszm.libraryapi.service;
 
+import io.github.marlonszm.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.marlonszm.libraryapi.model.Autor;
 import io.github.marlonszm.libraryapi.repository.AutorRepository;
+import io.github.marlonszm.libraryapi.repository.LivroRepository;
 import io.github.marlonszm.libraryapi.validator.AutorValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+// Construtor gerado pelo lombok
+@RequiredArgsConstructor
 @Service
 public class AutorService {
 
@@ -19,10 +24,9 @@ public class AutorService {
     @Autowired
     private final AutorValidator autorValidator;
 
-    public AutorService(AutorRepository autorRepository, AutorValidator autorValidator) {
-        this.autorRepository = autorRepository;
-        this.autorValidator = autorValidator;
-    }
+    @Autowired
+    private final LivroRepository livroRepository;
+
 
     public Autor salvar(Autor autor) {
         autorValidator.validar(autor);
@@ -34,6 +38,10 @@ public class AutorService {
     }
 
     public void deletar(Autor autor) {
+        if (possuiLivro(autor)) {
+            throw new OperacaoNaoPermitidaException(
+                    "Não é permitido excluir um autor que possui livros cadastrados");
+        }
         autorRepository.delete(autor);
     }
 
@@ -56,6 +64,10 @@ public class AutorService {
         }
         autorValidator.validar(autor);
         autorRepository.save(autor);
+    }
+
+    public boolean possuiLivro(Autor autor){
+        return livroRepository.existsByAutor(autor);
     }
 
 }

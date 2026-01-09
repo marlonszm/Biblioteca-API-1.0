@@ -30,7 +30,7 @@ public class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setName("Marlon");
         autor.setNacionalidade("brasileiro");
-        autor.setData_nascimento(LocalDate.of(2005, 4, 2));
+        autor.setDataNascimento(LocalDate.of(2005, 4, 2));
         repository.save(autor);
     }
 
@@ -43,7 +43,7 @@ public class AutorRepositoryTest {
         if (possivelAutor.isPresent()) {
             Autor autorEncontrado = possivelAutor.get();
             System.out.println("Autor: " + autorEncontrado);
-            autorEncontrado.setData_nascimento(LocalDate.of(1961, 3, 30));
+            autorEncontrado.setDataNascimento(LocalDate.of(1961, 3, 30));
             repository.save(autorEncontrado);
         }
 
@@ -78,7 +78,7 @@ public class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setName("Paul Mccartney");
         autor.setNacionalidade("Inglês");
-        autor.setData_nascimento(LocalDate.of(1942, 10, 24));
+        autor.setDataNascimento(LocalDate.of(1942, 10, 24));
 
         Livro livro = new Livro();
         livro.setIsbn("91888-84874");

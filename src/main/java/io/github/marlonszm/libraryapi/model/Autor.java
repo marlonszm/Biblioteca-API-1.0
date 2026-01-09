@@ -42,7 +42,6 @@ public class Autor {
     // Um autor pode ter um ou vários livros
     @OneToMany(
             mappedBy = "autor",
-            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private List<Livro> livros;
