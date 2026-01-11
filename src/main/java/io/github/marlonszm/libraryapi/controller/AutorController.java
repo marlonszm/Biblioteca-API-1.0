@@ -7,6 +7,7 @@ import io.github.marlonszm.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.marlonszm.libraryapi.model.Autor;
 import io.github.marlonszm.libraryapi.repository.AutorRepository;
 import io.github.marlonszm.libraryapi.service.AutorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class AutorController {
     private AutorService autorService;
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) {
         try{
             Autor autorEntidade = autor.mapearParaAutor();
             autorService.salvar(autorEntidade);
@@ -87,7 +88,7 @@ public class AutorController {
     @GetMapping
     public ResponseEntity<List<AutorDTO>> pesquisar(@RequestParam(value = "name", required = false) String nome,
                                                     @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
-        List<Autor> resultado =  autorService.pesquisa(nome, nacionalidade);
+        List<Autor> resultado =  autorService.pesquisaByExample(nome, nacionalidade);
         List<AutorDTO> lista = resultado
                 .stream().map(autor -> new AutorDTO(autor.getId(),
                         autor.getName(),
@@ -100,7 +101,7 @@ public class AutorController {
 
     @PutMapping("{id}")
     public ResponseEntity<Object> atualizar(@PathVariable String id,
-                                          @RequestBody AutorDTO dto){
+                                          @RequestBody @Valid AutorDTO dto){
         try{
             var idAutor = UUID.fromString(id);
             Optional<Autor> autorOptional = autorService.visualizarPorId(idAutor);
