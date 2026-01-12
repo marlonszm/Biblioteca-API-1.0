@@ -1,6 +1,5 @@
 package io.github.marlonszm.libraryapi.controller.dto;
 
-import io.github.marlonszm.libraryapi.model.Autor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -12,7 +11,7 @@ import java.util.UUID;
 public record AutorDTO(UUID id,
                        @NotBlank(message = "campo obrigatório")
                        @Size(min = 2, max = 100, message = "campo fora do tamanho padrão")
-                       String nome,
+                       String name,
                        @NotNull(message = "campo obrigatório")
                        @Past(message = "não pode ser uma data futura")
                        LocalDate dataNascimento,
@@ -20,14 +19,5 @@ public record AutorDTO(UUID id,
                        @Size(max = 50, min = 2, message = "campo fora do tamanho padrão")
                        String nacionalidade)
 {
-
-    public Autor mapearParaAutor(){
-        Autor autor = new Autor();
-        autor.setName(this.nome);
-        autor.setDataNascimento(this.dataNascimento);
-        autor.setNacionalidade(this.nacionalidade);
-        return autor;
-    }
-
 
 }

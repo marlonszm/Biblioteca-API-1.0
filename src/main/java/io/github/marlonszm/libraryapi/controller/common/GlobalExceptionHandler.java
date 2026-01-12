@@ -2,6 +2,7 @@ package io.github.marlonszm.libraryapi.controller.common;
 
 import io.github.marlonszm.libraryapi.controller.dto.ErroCampo;
 import io.github.marlonszm.libraryapi.controller.dto.ErroResposta;
+import io.github.marlonszm.libraryapi.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,5 +29,6 @@ public class GlobalExceptionHandler {
                 "Erro de validação",
                 listaErros);
     }
+
 
 }
