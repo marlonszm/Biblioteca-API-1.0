@@ -2,6 +2,7 @@ package io.github.marlonszm.libraryapi.controller.common;
 
 import io.github.marlonszm.libraryapi.controller.dto.ErroCampo;
 import io.github.marlonszm.libraryapi.controller.dto.ErroResposta;
+import io.github.marlonszm.libraryapi.exceptions.CampoInvalidoException;
 import io.github.marlonszm.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.marlonszm.libraryapi.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,17 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(CampoInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResposta handleCampoInvalidoException(CampoInvalidoException e) {
+        return new ErroResposta(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro de validação",
+                List.of(new ErroCampo(e.getCampo(), e.getMessage()))
+        );
+    }
+
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public ErroResposta handleErrosDiversos(RuntimeException e){
@@ -51,6 +63,7 @@ public class GlobalExceptionHandler {
                 "Ocorreu um erro inesperado, entre em contato com a administração do sistema",
                 List.of() );
     }
+
 
 
 }

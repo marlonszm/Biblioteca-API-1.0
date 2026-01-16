@@ -3,6 +3,8 @@ package io.github.marlonszm.libraryapi.repository;
 import io.github.marlonszm.libraryapi.model.Autor;
 import io.github.marlonszm.libraryapi.model.GeneroLivro;
 import io.github.marlonszm.libraryapi.model.Livro;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-/**
- * @see LivroRepositoryTest
- */
 
 public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecificationExecutor<Livro> {
+
+
 
     //Query Methods (seguir sintaxe camel case e de acordo com as palavras chave disponibilizadas)
 
@@ -37,6 +39,8 @@ public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecific
 
     //select * from livro where titulo = ? or isbn = ?
     List<Livro> findByTituloOrIsbn(String titulo, String isbn);
+
+    Optional<Livro> findLivroByIsbn(String isbn);
 
     //select * from livro where data_publicacao between ? and ?
     List<Livro> findByDataPublicacaoBetween(LocalDate dataInicio, LocalDate dataFim);
