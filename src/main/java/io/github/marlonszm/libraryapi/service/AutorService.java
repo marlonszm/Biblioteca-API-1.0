@@ -2,8 +2,10 @@ package io.github.marlonszm.libraryapi.service;
 
 import io.github.marlonszm.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.marlonszm.libraryapi.model.Autor;
+import io.github.marlonszm.libraryapi.model.Usuario;
 import io.github.marlonszm.libraryapi.repository.AutorRepository;
 import io.github.marlonszm.libraryapi.repository.LivroRepository;
+import io.github.marlonszm.libraryapi.security.SecurityService;
 import io.github.marlonszm.libraryapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +22,19 @@ import java.util.UUID;
 @Service
 public class AutorService {
 
-    //Nomenclatrua sempre private final para adicionar no construtor final
-    @Autowired
     private final AutorRepository autorRepository;
 
-    @Autowired
     private final AutorValidator autorValidator;
 
-    @Autowired
     private final LivroRepository livroRepository;
+
+    private final SecurityService securityService;
 
 
     public Autor salvar(Autor autor) {
         autorValidator.validar(autor);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        autor.setUsuario(usuario);
         return autorRepository.save(autor);
     }
 

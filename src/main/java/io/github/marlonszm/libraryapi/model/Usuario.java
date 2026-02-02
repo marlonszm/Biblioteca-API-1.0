@@ -11,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Table
 @Data
+
 public class Usuario {
 
     @Id
