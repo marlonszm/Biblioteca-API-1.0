@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,9 +30,10 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(configurer ->{
-                    configurer.loginPage("/login");
-                })
+//                .formLogin(configurer ->{
+//                    configurer.loginPage("/login");
+//                })
+                .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
@@ -42,6 +44,7 @@ public class SecurityConfiguration {
                     // autorizações de consulta de endpoints
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
@@ -51,7 +54,7 @@ public class SecurityConfiguration {
     }
 
 
-    @Bean
+
     public UserDetailsService userDetailsService(UsuarioService usuarioService) {
 
 //        UserDetails firstUser = User.builder()
@@ -69,6 +72,13 @@ public class SecurityConfiguration {
 //        return new InMemoryUserDetailsManager(firstUser, secondUser);
 
         return new CustomUserDetailsService(usuarioService);
+    }
+
+    // Eliminação de prefixos nas roles geradas
+    // automaticamente pelo spring
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("");
     }
 
 }
