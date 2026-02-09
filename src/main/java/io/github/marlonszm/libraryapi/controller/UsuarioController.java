@@ -5,6 +5,7 @@ import io.github.marlonszm.libraryapi.controller.mappers.UsuarioMapper;
 import io.github.marlonszm.libraryapi.model.Usuario;
 import io.github.marlonszm.libraryapi.repository.UsuarioRepository;
 import io.github.marlonszm.libraryapi.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void salvar(@RequestBody UsuarioDTO dto){
+    public void salvar(@RequestBody @Valid UsuarioDTO dto){
         var usuario = usuarioMapper.toEntity(dto);
         usuarioService.salvar(usuario);
     }
