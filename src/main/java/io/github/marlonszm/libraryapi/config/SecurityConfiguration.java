@@ -18,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -50,33 +52,8 @@ public class SecurityConfiguration {
                                 .loginPage("/login")
                                 .successHandler(successHandler)
                 )
+                .oauth2ResourceServer(oauth2RS -> oauth2RS.jwt(Customizer.withDefaults()))
                 .build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
-
-
-
-    public UserDetailsService userDetailsService(UsuarioService usuarioService) {
-
-//        UserDetails firstUser = User.builder()
-//                .username("usuario")
-//                .password(passwordEncoder.encode("123"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails secondUser = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder.encode("321"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(firstUser, secondUser);
-
-        return new CustomUserDetailsService(usuarioService);
     }
 
     // Eliminação de prefixos nas roles geradas
@@ -84,6 +61,19 @@ public class SecurityConfiguration {
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults("");
+    }
+
+    // Configura o prefixo 'SCOPE' no token JWT
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+         var authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+         authoritiesConverter.setAuthorityPrefix("");
+
+         var converter = new JwtAuthenticationConverter();
+
+         converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+
+         return converter;
     }
 
 }

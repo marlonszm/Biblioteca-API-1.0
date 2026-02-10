@@ -47,8 +47,6 @@ public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSu
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         super.onAuthenticationSuccess(request, response, authentication);
-
-        System.out.println(authentication.getAuthorities());
     }
 
     public Usuario cadastrarUsuarioNaBase(String email){
